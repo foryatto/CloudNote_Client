@@ -53,7 +53,7 @@
             <el-pagination v-if="!isSearchMode" @current-change="getNote" background layout="prev, pager, next"
                 :total="tableData.total" :current-page="pageNum" :page-size="pageSize">
             </el-pagination>
-            <el-pagination v-if="isSearchMode" @current-change="searchNotices" background layout="prev, pager, next"
+            <el-pagination v-if="isSearchMode" @current-change="searchNotes" background layout="prev, pager, next"
                 :total="searchResult.total" :current-page="searchResult.pageNum" :page-size="searchResult.pageSize">
             </el-pagination>
         </div>

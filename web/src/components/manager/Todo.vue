@@ -1,17 +1,16 @@
 <template>
     <div>
         <div>
-
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">
                 <el-form-item label="搜索：">
                     <el-input v-model="searchForm.title" clearable placeholder="按标题搜索"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button icon="el-icon-search" type="primary" @click="search()"></el-button>
+                    <el-button icon="el-icon-search" type="primary" @click="searchTodo()"></el-button>
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button type="primary" @click="addFormVisible = true">新增分类</el-button>
+                    <el-button type="primary" @click="addFormVisible = true">新增待办</el-button>
                 </el-form-item>
 
                 <el-form-item>
@@ -25,63 +24,83 @@
                 stripe>
                 <el-table-column type="selection" width="55">
                 </el-table-column>
-                <el-table-column prop="categoryId" label="ID" v-if="tableIdShow">
+                <el-table-column prop="planId" label="ID" v-if="tableIdShow">
                 </el-table-column>
-                <el-table-column prop="title" label="分类">
+                <el-table-column prop="title" label="标题">
                 </el-table-column>
 
-                <el-table-column prop="description" label="描述">
+                <el-table-column prop="content" label="内容">
+                </el-table-column>
+
+                <el-table-column prop="createdAt" sortable label="创建时间">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        {{ scope.row.createdAt | dateFormat }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="completed" label="进度" :filters="options" :filter-method="filterTag"
+                    filter-placement="bottom-end">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.completed == true ">
+                            <el-tag type="success" disable-transitions>已完成</el-tag>
+                        </div>
+                        <div v-else>
+                            <el-tag type="warning" disable-transitions>未完成</el-tag>
+                        </div>
+                    </template>
+
                 </el-table-column>
 
                 <el-table-column fixed="right" label="操作" width="100">
                     <template slot-scope="scope">
                         <el-button @click="showModifyForm(scope.row)" type="text" size="small">编辑</el-button>
-                        <el-button @click="viewNoteDetail(scope.row)" type="text" size="small">查看</el-button>
+                        <el-button @click="UpdateStatus(scope.row)" type="text" size="small">状态</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
 
         <div style="margin-top:20px">
-            <el-pagination v-if="!isSearchMode" @current-change="getNote" background layout="prev, pager, next"
+            <el-pagination v-if="!isSearchMode" @current-change="getTodo" background layout="prev, pager, next"
                 :total="tableData.total" :current-page="pageNum" :page-size="pageSize">
             </el-pagination>
-            <el-pagination v-if="isSearchMode" @current-change="searchNotices" background layout="prev, pager, next"
+            <el-pagination v-if="isSearchMode" @current-change="searchTodo" background layout="prev, pager, next"
                 :total="searchResult.total" :current-page="searchResult.pageNum" :page-size="searchResult.pageSize">
             </el-pagination>
         </div>
 
         <div>
-            <el-dialog title="新增分类" :visible.sync="addFormVisible">
+            <el-dialog title="新增待办" :visible.sync="addFormVisible">
                 <el-form :model="addData">
                     <el-form-item label="标题">
                         <el-input v-model="addData.title" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="描述">
-                        <el-input type="textarea" rows="5" v-model="addData.description" auto-complete="off"></el-input>
+                    <el-form-item label="内容">
+                        <el-input type="textarea" rows="5" v-model="addData.content" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="addFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="addCategory">提交</el-button>
+                    <el-button type="primary" @click="addTodo">提交</el-button>
                 </div>
             </el-dialog>
         </div>
 
         <div>
-            <el-dialog title="编辑分类" :visible.sync="modifyFormVisible">
+            <el-dialog title="编辑待办" :visible.sync="modifyFormVisible">
                 <el-form :model="modifyData">
                     <el-form-item label="标题">
                         <el-input v-model="modifyData.title" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="描述">
-                        <el-input type="textarea" rows="5" v-model="modifyData.description" auto-complete="off">
+                        <el-input type="textarea" rows="5" v-model="modifyData.content" auto-complete="off">
                         </el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modifyFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="modifyCategory">提交</el-button>
+                    <el-button type="primary" @click="modifyTodo">提交</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -105,18 +124,24 @@
                 },
                 searchResult: [],
                 batch_id: [],
-                options: [],
+                options: [{
+                    "text": "已完成",
+                    "value": true
+                }, {
+                    "text": "未完成",
+                    "value": false
+                }],
 
                 addFormVisible: false,
                 modifyFormVisible: false,
                 addData: {
                     'title': '',
-                    'description': '',
+                    'content': '',
                 },
                 modifyData: {
-                    'categoryId': '',
                     'title': '',
-                    'description': '',
+                    'content': '',
+                    'completed': '',
                 },
             }
         },
@@ -125,17 +150,17 @@
             batchDelete() {
                 // 判断要删除的ID数组是否为空
                 if (this.batch_id.length == 0) {
-                    this.$message.error('请先选择要删除的分类!');
+                    this.$message.error('请先选择要删除的待办!');
                 } else {
                     // 确认窗口，需要确认才能执行下一步，向服务器发送删除请求
-                    this.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
+                    this.$confirm('此操作将永久删除该待办, 是否继续?', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
                         // 向服务器发送删除请求
                         this.axios
-                            .delete('/categories', {
+                            .delete('/plans', {
                                 params: {
                                     ids: this.batch_id
                                 },
@@ -151,7 +176,7 @@
                                         message: '删除成功',
                                         type: 'success'
                                     });
-                                    this.getCategories()
+                                    this.getTodo(this.pageNum)
                                 } else {
                                     this.$message.error('删除失败');
                                 }
@@ -167,15 +192,17 @@
                     });
                 }
             },
-            // 根据标题搜索分类
-            search() {
+            // 根据笔记标题搜索笔记
+            searchTodo() {
                 if (this.searchForm.title == "") {
-                    this.getCategories()
+                    this.getTodo(1)
                 } else {
                     this.axios
-                        .get('/categories', {
+                        .get('/plans', {
                             params: {
-                                title: this.searchForm.title
+                                page: 1,
+                                pageSize: this.pageSize,
+                                title: this.searchForm.title,
                             },
                             headers: {
                                 Authorization: "Bearer " + localStorage.getItem("authKey")
@@ -183,9 +210,7 @@
                         })
                         .then(successResponse => {
                             var result = successResponse.data
-                            this.options = []
                             this.tableData = result.data
-                            console.log(this.tableData)
                         })
                         .catch(failResponse => {
                             console.log(failResponse)
@@ -193,27 +218,22 @@
                 }
 
             },
-            // 当选中对应行数据时, 执行该函数, 将所有已选择行的ID存在一个数组中
-            handleSelectionChange(val) {
-                this.batch_id = []
-                for (var i = 0; i < val.length; i++) {
-                    this.batch_id.push(val[i].categoryId)
-                }
-                console.log(this.batch_id)
-            },
-            getCategories() {
+            // 获取待办
+            getTodo(pageNum) {
+                this.pageNum = pageNum
                 this.axios
-                    .get('/categories', {
-                        params: {},
+                    .get('/plans', {
+                        params: {
+                            page: pageNum,
+                            pageSize: this.pageSize,
+                        },
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("authKey")
                         }
                     })
                     .then(successResponse => {
                         var result = successResponse.data
-                        this.options = []
                         this.tableData = result.data
-                        console.log(this.tableData)
                     })
                     .catch(failResponse => {
                         console.log(failResponse)
@@ -225,11 +245,26 @@
                 // 将当前行的数据传入对话框中的表单数据
                 this.modifyData = rowData
             },
-            addCategory() {
+            // 当选中对应行数据时, 执行该函数, 将所有已选择行的ID存在一个数组中
+            handleSelectionChange(val) {
+                this.batch_id = []
+                for (var i = 0; i < val.length; i++) {
+                    this.batch_id.push(val[i].planId)
+                }
+                console.log(this.batch_id)
+            },
+            filterTag(value, row) {
+                return row.completed === value;
+            },
+            filterHandler(value, row, column) {
+                const property = column['property'];
+                return row[property] === value;
+            },
+            addTodo() {
                 this.axios
-                    .post("/categories", {
+                    .post("/plans", {
                         "title": this.addData.title,
-                        "description": this.addData.description,
+                        "content": this.addData.content,
                     }, {
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("authKey")
@@ -243,9 +278,9 @@
                                 type: 'success'
                             });
                             this.addData.title = ""
-                            this.addData.description = ""
+                            this.addData.content = ""
                             this.addFormVisible = false
-                            this.getCategories()
+                            this.getTodo()
                         } else {
                             this.$message.error('创建失败，请稍后重试');
                         }
@@ -254,13 +289,12 @@
                         console.log(failResponse)
                     })
             },
-            modifyCategory() {
-
+            modifyTodo() {
                 var updateResult = true
 
-                this.axios.put("/categories/title", {
+                this.axios.put("/plan/title", {
                         "title": this.modifyData.title,
-                        "categoryId": this.modifyData.categoryId
+                        "planId": this.modifyData.planId
                     }, {
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("authKey")
@@ -276,9 +310,9 @@
                     })
 
 
-                this.axios.put("/categories/description", {
-                        "description": this.modifyData.description,
-                        "categoryId": this.modifyData.categoryId
+                this.axios.put("/plan/content", {
+                        "content": this.modifyData.content,
+                        "planId": this.modifyData.planId
                     }, {
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("authKey")
@@ -302,13 +336,36 @@
                 } else {
                     this.$message.error('更新失败，请稍后重试');
                 }
-
+            },
+            UpdateStatus(row) {
+                this.axios.put("/plan", {
+                        "completed": !row.completed,
+                        "planId": row.planId
+                    }, {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("authKey")
+                        }
+                    }).then(successResponse => {
+                        var result = successResponse.data
+                        if (result.code == 0) {
+                            this.$message({
+                                message: '更新成功',
+                                type: 'success'
+                            });
+                            this.getTodo()
+                        } else {
+                            this.$message.error('更新失败，请稍后重试');
+                        }
+                    })
+                    .catch(failResponse => {
+                        console.log(failResponse)
+                    })
             }
         },
         // vue的生命周期函数
         mounted() {
-            // 获取笔记分类
-            this.getCategories()
+            // 获取用户笔记
+            this.getTodo(this.pageNum)
         },
 
     }

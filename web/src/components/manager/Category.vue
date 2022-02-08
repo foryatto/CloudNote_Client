@@ -36,17 +36,17 @@
                 <el-table-column fixed="right" label="操作" width="100">
                     <template slot-scope="scope">
                         <el-button @click="showModifyForm(scope.row)" type="text" size="small">编辑</el-button>
-                        <el-button @click="viewNoteDetail(scope.row)" type="text" size="small">查看</el-button>
+                        <!-- <el-button @click="viewNoteDetail(scope.row)" type="text" size="small">查看</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
         </div>
 
         <div style="margin-top:20px">
-            <el-pagination v-if="!isSearchMode" @current-change="getNote" background layout="prev, pager, next"
+            <el-pagination v-if="!isSearchMode" @current-change="getCategories" background layout="prev, pager, next"
                 :total="tableData.total" :current-page="pageNum" :page-size="pageSize">
             </el-pagination>
-            <el-pagination v-if="isSearchMode" @current-change="searchNotices" background layout="prev, pager, next"
+            <el-pagination v-if="isSearchMode" @current-change="search" background layout="prev, pager, next"
                 :total="searchResult.total" :current-page="searchResult.pageNum" :page-size="searchResult.pageSize">
             </el-pagination>
         </div>
