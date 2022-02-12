@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Login from '../views/Login.vue'
+import SignUp from '../views/SignUp.vue'
 import Manager from '../views/Manager.vue'
 
 import Note from '../components/manager/Note.vue'
@@ -76,6 +77,11 @@ const routes = [
     path: '/viewNote',
     name: 'ViewNote',
     component: ViewNote
+  },
+  {
+    path: '/signUp',
+    name: 'SignUp',
+    component: SignUp
   },
 ]
 

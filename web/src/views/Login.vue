@@ -2,7 +2,7 @@
 
     <body id="paper">
         <el-form :model="loginForm" :rules="rules" class="login-container">
-            <h3 class="login_title">系统登录</h3>
+            <h3 class="login_title">用户登录</h3>
             <el-form-item prop="email">
                 <el-input type="text" v-model="loginForm.email" auto-complete="off" placeholder="邮箱"></el-input>
             </el-form-item>
@@ -12,9 +12,12 @@
             <el-checkbox class="login_remember" v-model="checked" label-position="left"><span
                     style="color: #505458">记住账号</span></el-checkbox>
             <el-form-item >
-                <el-button type="primary" style="width: 100%; background: #505458; border: none;"
-                    v-on:click="login">登录
+                <el-button type="primary" style="width: 48%; background: #505458; border: none;"
+                    v-on:click="toSignUp">注册
                 </el-button>
+                <el-button type="primary" style="width: 48%; background: #505458; border: none;"
+                    v-on:click="login">登录
+                </el-button>   
             </el-form-item>
         </el-form>
     </body>
@@ -77,6 +80,11 @@
                     .catch(failResponse => {
                         console.log(failResponse)
                     })
+            },
+            toSignUp(){
+                this.$router.replace({
+                                path: '/signUp'
+                            })
             }
         }
     }
