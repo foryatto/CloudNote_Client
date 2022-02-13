@@ -1,6 +1,6 @@
 # flutter_app
 
-A new Flutter project.
+CloudNote Flutter project.
 
 ## Getting Started
 
