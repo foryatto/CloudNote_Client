@@ -1,6 +1,8 @@
 <template>
-    <div style="margin:20px 20px">
-        <van-nav-bar :title="note.title" left-text="返回" left-arrow @click-left="goBack"/>
+    <div style="">
+        <van-sticky>
+            <van-nav-bar :title="note.title" left-text="返回" left-arrow @click-left="goBack" />
+        </van-sticky>
         <v-md-editor :value="note.content" mode="preview"></v-md-editor>
     </div>
 </template>

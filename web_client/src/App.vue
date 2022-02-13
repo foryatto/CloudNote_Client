@@ -1,13 +1,13 @@
 <template>
   <div id="app">
-    <!-- <van-nav-bar title="云笔记" style="background: #ecf4f3">
+    <van-nav-bar title="云笔记" style="background: #ecf4f3">
       <template #left>
         <van-icon name="wap-nav" size="18" />
       </template>
       <template #right>
         <van-icon name="search" size="18" @click="gotoSearch"/>
       </template>
-    </van-nav-bar> -->
+    </van-nav-bar>
 
     <router-view />
 

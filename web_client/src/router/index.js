@@ -5,11 +5,11 @@ import Todo from '../components/Todo.vue'
 import Me from '../components/Me.vue'
 import ViewNote from '../components/ViewNote.vue'
 
-import Selection from '../components/Selection.vue'
+
 import Search from '../components/Search.vue'
 import SearchInfo from '../components/SearchInfo.vue'
 import Login from '../components/Login.vue'
-import TopicInfo from '../components/TopicInfo.vue'
+
 
 Vue.use(VueRouter)
 
@@ -54,14 +54,6 @@ const routes = [
     },
   },
   {
-    path: '/selection',
-    name: 'Selection',
-    component: Selection,
-    meta:{
-      requireAuth: true
-    },
-  },
-  {
     path: '/search',
     name: 'Search',
     component: Search,
@@ -81,14 +73,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-  },
-  {
-    path: '/topicInfo/:id',
-    name: 'TopicInfo',
-    component: TopicInfo,
-    meta:{
-      requireAuth: true
-    },
   },
 ]
 

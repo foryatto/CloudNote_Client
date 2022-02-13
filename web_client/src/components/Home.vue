@@ -6,7 +6,7 @@
 
         <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
             <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-                <van-cell v-for="item in list" :key="item.noteId" :title="item.title" :to="'viewNote?id='+item.noteId"/>
+                <van-cell v-for="item in list" :key="item.noteId" :title="item.title" :to="'/viewNote?id='+item.noteId"/>
             </van-list>
         </van-pull-refresh>
 
@@ -45,8 +45,8 @@
                     this.axios
                         .get('/notes', {
                             params: {
-                                page: this.pageNum,
-                                pageSize: this.pageSize,
+                                // page: this.pageNum,
+                                // pageSize: this.pageSize,
                             },
                             headers: {
                                 Authorization: "Bearer " + localStorage.getItem("authKey")
@@ -111,8 +111,8 @@
                     this.axios
                         .get('/notes', {
                             params: {
-                                page: this.pageNum,
-                                pageSize: this.pageSize,
+                                // page: this.pageNum,
+                                // pageSize: this.pageSize,
                                 categoryId: this.categoryId
                             },
                             headers: {

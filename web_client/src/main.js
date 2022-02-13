@@ -37,9 +37,13 @@ VMdPreview.use(githubTheme, {
 Vue.use(VMdPreview);
 
 Vue.use(Vant);
+import { Notify } from 'vant';
+
+// 全局注册
+Vue.use(Notify);
 Vue.use(VueAxios, axios)
 
-axios.defaults.baseURL="http://localhost:8888/api/v1";
+axios.defaults.baseURL="http://127.0.0.1:8888/api/v1";
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
