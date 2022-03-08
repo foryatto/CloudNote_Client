@@ -1,9 +1,11 @@
 <template>
-    <div style="margin:20px 20px">
-        <div>
-            <el-page-header @back="goBack" :content="note.title"></el-page-header>
+    <div>
+        <div class="head-style">
+            <el-page-header @back="goBack" :content="note.title" class="el-page-header"></el-page-header>
         </div>
-        <v-md-preview :text="note.content"></v-md-preview>
+
+        <v-md-preview :text="note.content" style="padding-top:40px"></v-md-preview>
+
     </div>
 </template>
 
@@ -45,3 +47,20 @@
         }
     };
 </script>
+
+<style scoped>
+.head-style{
+    position: fixed;
+    width:100%;
+    /* height:40px; */
+    line-height: 40px;
+    background-color:#F5F5F5;
+
+}
+
+.el-page-header{
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+}
+</style>

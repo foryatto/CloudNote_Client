@@ -16,7 +16,11 @@
                 <el-input type="password" v-model="form.password2" auto-complete="off" placeholder="确认密码"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" style="width: 100%; background: #505458; border: none;" v-on:click="signUp">注册
+                <el-button type="primary" style="width: 48%; background: #505458; border: none;"
+                    v-on:click="toLogin">返回
+                </el-button>
+                <el-button type="primary" style="width: 48%; background: #505458; border: none;"
+                    v-on:click="signUp">注册
                 </el-button>
             </el-form-item>
         </el-form>
@@ -86,7 +90,11 @@
                             console.log(failResponse)
                         })
                 }
-
+            },
+            toLogin(){
+                this.$router.replace({
+                                path: '/'
+                            })
             }
         }
     }

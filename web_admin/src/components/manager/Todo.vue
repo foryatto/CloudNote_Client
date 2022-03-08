@@ -226,7 +226,7 @@
                         params: {
                             page: pageNum,
                             pageSize: this.pageSize,
-                            completed: false,
+                            completed: 0,
                         },
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("authKey")
@@ -239,34 +239,6 @@
                     .catch(failResponse => {
                         console.log(failResponse)
                     })
-
-                    this.axios
-                    .get('/plans', {
-                        params: {
-                            page: pageNum,
-                            pageSize: this.pageSize,
-                            completed: true,
-                        },
-                        headers: {
-                            Authorization: "Bearer " + localStorage.getItem("authKey")
-                        }
-                    })
-                    .then(successResponse => {
-                        var result = successResponse.data
-                        if (this.tableData.items == null) {
-                            this.tableData.items = []
-                        }
-                        for (var i in result.data.items) {
-                            this.tableData.items.push(result.data.items[i])
-                            this.tableData.total++
-                        }
-                        
-                    })
-                    .catch(failResponse => {
-                        console.log(failResponse)
-                    })
-
-                    console.log(this.tableData)
             },
             // 显示编辑对话框
             showModifyForm(rowData) {
