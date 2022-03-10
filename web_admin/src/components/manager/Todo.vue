@@ -277,7 +277,7 @@
                             this.$message({
                                 message: '创建成功',
                                 type: 'success'
-                            });
+                            }); 
                             this.addData.title = ""
                             this.addData.content = ""
                             this.addFormVisible = false

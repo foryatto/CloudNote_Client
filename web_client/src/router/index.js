@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../components/Home.vue'
 import Todo from '../components/Todo.vue'
+import Category from '../components/Category.vue'
+import Analyze from '../components/Analyze.vue'
+
 import Me from '../components/Me.vue'
 import ViewNote from '../components/ViewNote.vue'
 
@@ -49,6 +52,22 @@ const routes = [
     path: '/todo',
     name: 'todo',
     component: Todo,
+    meta:{
+      requireAuth: true
+    },
+  },
+  {
+    path: '/category',
+    name: 'category',
+    component: Category,
+    meta:{
+      requireAuth: true
+    },
+  },
+  {
+    path: '/analyze',
+    name: 'analyze',
+    component: Analyze,
     meta:{
       requireAuth: true
     },

@@ -63,7 +63,7 @@
           value: true
         }],
         value: false,
-        todo:{},
+        todo: {},
         showDetailContent: false
       }
     },
@@ -74,13 +74,18 @@
             this.list = [];
             this.refreshing = false;
           }
-
+          var param = 0
+          if (this.value == true) {
+            param = 1
+          } else {
+            param = 2
+          }
           this.axios
             .get('/plans', {
               params: {
                 // page: this.pageNum,
                 // pageSize: this.pageSize,
-                completed: this.value,
+                completed: param,
               },
               headers: {
                 Authorization: "Bearer " + localStorage.getItem("authKey")
@@ -115,12 +120,18 @@
       getTodoByStatus(value) {
         this.value = value
         this.list = []
+        var param = 0
+          if (value == true) {
+            param = 1
+          } else {
+            param = 2
+          }
         this.axios
           .get('/plans', {
             params: {
               // page: this.pageNum,
               // pageSize: this.pageSize,
-              completed: this.value,
+              completed: param,
             },
             headers: {
               Authorization: "Bearer " + localStorage.getItem("authKey")

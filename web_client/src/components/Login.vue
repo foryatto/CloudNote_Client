@@ -34,7 +34,7 @@
                         this.status = Response.data
                         if (this.status.data != null) {
                             localStorage.setItem("authKey", this.status.data)
-                            this.$router.push("/me")
+                            this.$router.push("/")
                         }
                     })
             }

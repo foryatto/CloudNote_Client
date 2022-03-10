@@ -54,7 +54,11 @@
     width:100%;
     /* height:40px; */
     line-height: 40px;
-    background-color:#F5F5F5;
+    background-color:#ffffff;
+    Z-index:9999;
+    border-bottom-style:solid;
+    border-bottom-color: black;
+    border-bottom-width: 1px;
 
 }
 
