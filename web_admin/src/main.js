@@ -42,9 +42,9 @@ Vue.use(ElementUI);
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL="http://localhost:8888/api/v1/";
+// axios.defaults.baseURL="http://localhost:8888/api/v1/";
 
-// axios.defaults.baseURL = "/api/v1/";
+axios.defaults.baseURL = "/api/v1/";
 
 axios.defaults.timeout = 2500;
 
